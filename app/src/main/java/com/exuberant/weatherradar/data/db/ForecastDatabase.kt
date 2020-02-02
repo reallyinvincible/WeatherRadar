@@ -10,7 +10,8 @@ import com.exuberant.weatherradar.data.db.entity.CurrentWeatherEntry
 
 @Database(
     entities = [CurrentWeatherEntry::class],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 @TypeConverters(ListConverter::class)
 abstract class ForecastDatabase: RoomDatabase(){
