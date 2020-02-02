@@ -1,11 +1,8 @@
-package com.exuberant.weatherradar.data
+package com.exuberant.weatherradar.data.network
 
-import com.exuberant.weatherradar.data.network.ConnectivityInterceptor
-import com.exuberant.weatherradar.data.network.ConnectivityInterceptorImpl
 import com.exuberant.weatherradar.data.network.response.CurrentWeatherResponse
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -33,7 +30,9 @@ interface ApixuWeatherApiService {
                 val url = chain.request()
                     .url
                     .newBuilder()
-                    .addQueryParameter("access_key", API_KEY)
+                    .addQueryParameter("access_key",
+                        API_KEY
+                    )
                     .build()
 
                 val request = chain.request()

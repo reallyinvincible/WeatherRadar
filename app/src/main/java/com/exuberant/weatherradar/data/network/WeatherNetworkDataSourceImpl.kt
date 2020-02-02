@@ -1,23 +1,27 @@
 package com.exuberant.weatherradar.data.network
 
+import android.util.Log
 import androidx.lifecycle.LiveData
-import com.exuberant.weatherradar.data.ApixuWeatherApiService
+import androidx.lifecycle.MutableLiveData
 import com.exuberant.weatherradar.data.network.response.CurrentWeatherResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.exuberant.weatherradar.internal.NoConnectivityException
 
 class WeatherNetworkDataSourceImpl(
     private val apixuWeatherApiService: ApixuWeatherApiService
 ) : WeatherNetworkDataSource {
 
-
+    private val _downloadedCurrentWeather = MutableLiveData<CurrentWeatherResponse>()
 
     override val downloadedCurrentWeather: LiveData<CurrentWeatherResponse>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = _downloadedCurrentWeather
 
     override suspend fun fetchCurrentWeather(location: String) {
-        val fetchedCurrentWeather = apixuWeatherApiService
-            .getCurrentWeather(location)
+        try {
+            val fetchedCurrentWeather = apixuWeatherApiService
+                .getCurrentWeather(location)
+            _downloadedCurrentWeather.postValue(fetchedCurrentWeather.body())
+        } catch (e: NoConnectivityException) {
+            Log.e("Connectivity", "No internet connection", e)
+        }
     }
 }

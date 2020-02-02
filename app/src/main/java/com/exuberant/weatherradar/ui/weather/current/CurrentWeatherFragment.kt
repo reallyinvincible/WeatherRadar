@@ -6,22 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
 import com.exuberant.weatherradar.R
-import com.exuberant.weatherradar.data.ApixuWeatherApiService
-import com.exuberant.weatherradar.data.network.ConnectivityInterceptor
+import com.exuberant.weatherradar.data.network.ApixuWeatherApiService
 import com.exuberant.weatherradar.data.network.ConnectivityInterceptorImpl
-import com.exuberant.weatherradar.data.network.response.CurrentWeatherResponse
+import com.exuberant.weatherradar.data.network.WeatherNetworkDataSourceImpl
 import kotlinx.android.synthetic.main.current_weather_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.internal.wait
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class CurrentWeatherFragment : Fragment() {
 
@@ -43,14 +38,15 @@ class CurrentWeatherFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(CurrentWeatherViewModel::class.java)
         val apiService =
-            ApixuWeatherApiService(ConnectivityInterceptorImpl(context!!))
+            ApixuWeatherApiService(
+                ConnectivityInterceptorImpl(context!!)
+            )
+        val weatherNetworkDataSource = WeatherNetworkDataSourceImpl(apiService)
+        weatherNetworkDataSource.downloadedCurrentWeather.observe(this, Observer {
+            textView.text = it.toString()
+        })
         GlobalScope.launch(Dispatchers.Main) {
-            val currentWeatherResponse = apiService.getCurrentWeather("Lucknow")
-                if (currentWeatherResponse.isSuccessful){
-                    textView.text = currentWeatherResponse.body().toString()
-                } else {
-                    Toast.makeText(context, currentWeatherResponse.errorBody().toString(), Toast.LENGTH_SHORT).show()
-                }
+            weatherNetworkDataSource.fetchCurrentWeather("Vellore")
         }
     }
 
