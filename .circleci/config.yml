@@ -1,4 +1,4 @@
-ersion: 2
+version: 2
 jobs:
   build:
     working_directory: ~/WeatherRadar
@@ -26,6 +26,9 @@ jobs:
       - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: app/build/test-results
           destination: test-results/
+      - run:
+          name: prepare key
+          command: bash exec/prep-key.sh
       - run:
           name: Initial build
           command: ./gradlew clean assembleRelease --no-daemon --stacktrace
