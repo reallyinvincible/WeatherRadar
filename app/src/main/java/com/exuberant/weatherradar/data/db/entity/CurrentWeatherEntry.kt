@@ -4,7 +4,7 @@ package com.exuberant.weatherradar.data.db.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.exuberant.weatherradar.data.ListConverter
+import com.exuberant.weatherradar.data.db.ListConverter
 import com.google.gson.annotations.SerializedName
 
 const val CURRENT_WEATHER_ID = 0
