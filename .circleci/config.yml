@@ -30,9 +30,6 @@ jobs:
           path: app/build/test-results
           destination: test-results/
       - run:
-          name: prepare key
-          command: bash exec/prep-key.sh
-      - run:
           name: Initial build
           command: ./gradlew clean assembleRelease --no-daemon --stacktrace
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
