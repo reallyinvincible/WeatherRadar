@@ -36,7 +36,7 @@ jobs:
           path: app/build/test-results
       - run:
           name: Initial build
-          command: ./gradlew clean assembleDebug --no-daemon --stacktrace
+          command: ./gradlew clean assembleDebug --stacktrace
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
           path: app/build/outputs/apk/debug/
           destination: apks/
